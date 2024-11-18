@@ -1,3 +1,6 @@
+import pandas as pd
+import re
+
 class DataCollector:
     def __init__(self, DATA_DIR):
         self.artist = pd.read_csv(DATA_DIR + "/artist.csv")

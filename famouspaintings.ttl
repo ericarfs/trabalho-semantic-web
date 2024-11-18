@@ -1,0 +1,207 @@
+@prefix : <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings/> .
+
+<http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#hasCountry
+:hasCountry rdf:type owl:ObjectProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:range :Country .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#hasNationality
+:hasNationality rdf:type owl:ObjectProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain :Artist ;
+                rdfs:range :Nationality .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#hasStyle
+:hasStyle rdf:type owl:ObjectProperty ;
+          rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( :Artist
+                                      :Work
+                                    )
+                      ] ;
+          rdfs:range :Style .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#hasSubject
+:hasSubject rdf:type owl:ObjectProperty ;
+            rdfs:domain :Work ;
+            rdfs:range :Subject .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#isAllocating
+:isAllocating rdf:type owl:ObjectProperty ;
+              owl:inverseOf :isLocatedAt ;
+              rdf:type owl:InverseFunctionalProperty ;
+              rdfs:domain :Museum ;
+              rdfs:range :Work .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#isLocatedAt
+:isLocatedAt rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Work ;
+             rdfs:range :Museum .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#painted
+:painted rdf:type owl:ObjectProperty ;
+         owl:inverseOf :wasPaintedBy ;
+         rdf:type owl:InverseFunctionalProperty ;
+         rdfs:domain :Artist ;
+         rdfs:range :Work .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#wasPaintedBy
+:wasPaintedBy rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Work ;
+              rdfs:range :Artist .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#address
+:address rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#city
+:city rdf:type owl:DatatypeProperty ,
+               owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#phone
+:phone rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#postal
+:postal rdf:type owl:DatatypeProperty ,
+                 owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#state
+:state rdf:type owl:DatatypeProperty ,
+                owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#url
+:url rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/firstName
+foaf:firstName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/lastName
+foaf:lastName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/name
+foaf:name rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Artist
+:Artist rdf:type owl:Class ;
+        rdfs:subClassOf foaf:Person ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasStyle ;
+                          owl:someValuesFrom :Style
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :painted ;
+                          owl:someValuesFrom :Work
+                        ] .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Country
+:Country rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Museum
+:Museum rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasCountry ;
+                          owl:someValuesFrom :Country
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :isAllocating ;
+                          owl:someValuesFrom :Work
+                        ] .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Nationality
+:Nationality rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Style
+:Style rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Subject
+:Subject rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Work
+:Work rdf:type owl:Class ;
+      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasSubject ;
+                        owl:someValuesFrom :Subject
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :wasPaintedBy ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Artist
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasStyle ;
+                        owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Style
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :isLocatedAt ;
+                        owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Museum
+                      ] .
+
+
+###  http://xmlns.com/foaf/0.1/Person
+foaf:Person rdf:type owl:Class .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Country
+                :Museum
+                :Nationality
+                :Style
+                :Subject
+                :Work
+                foaf:Person
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
