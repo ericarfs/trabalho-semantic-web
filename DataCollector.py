@@ -30,7 +30,7 @@ class DataCollector:
             axis=1
         )
         self.subject["identifier"] = self.subject.apply(
-            lambda line: re.sub(r"[^a-zA-Z0-9]", "", str(line["subject"])),
+            lambda line: "Subject_" + re.sub(r"[^a-zA-Z0-9]", "", str(line["subject"])),
             axis=1
         )
         
