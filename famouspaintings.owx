@@ -7,6 +7,9 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings">
     <Prefix name="" IRI="http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings/"/>
+    <Prefix name="dbo" IRI="http://dbpedia.org/ontology/"/>
+    <Prefix name="dbp" IRI="http://dbpedia.org/property/"/>
+    <Prefix name="dbr" IRI="http://dbpedia.org/resource/"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
@@ -14,13 +17,16 @@
     <Prefix name="foaf" IRI="http://xmlns.com/foaf/0.1/"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
-        <Class IRI="#Artist"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Country"/>
+        <Class abbreviatedIRI="dbo:Country"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Museum"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="dbo:Painting"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Nationality"/>
@@ -32,34 +38,31 @@
         <Class IRI="#Subject"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Work"/>
+        <ObjectProperty abbreviatedIRI="dbo:movement"/>
     </Declaration>
     <Declaration>
-        <Class abbreviatedIRI="foaf:Person"/>
+        <ObjectProperty abbreviatedIRI="dbp:artist"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasCountry"/>
+        <ObjectProperty abbreviatedIRI="dbp:country"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasNationality"/>
+        <ObjectProperty abbreviatedIRI="dbp:museum"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasStyle"/>
+        <ObjectProperty abbreviatedIRI="dbp:nationality"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasSubject"/>
+        <ObjectProperty abbreviatedIRI="dbp:style"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty abbreviatedIRI="dbp:subject"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#isAllocating"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isLocatedAt"/>
-    </Declaration>
-    <Declaration>
         <ObjectProperty IRI="#painted"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#wasPaintedBy"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#address"/>
@@ -77,10 +80,10 @@
         <DataProperty IRI="#state"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#url"/>
+        <DataProperty abbreviatedIRI="foaf:firstName"/>
     </Declaration>
     <Declaration>
-        <DataProperty abbreviatedIRI="foaf:firstName"/>
+        <DataProperty abbreviatedIRI="foaf:homepage"/>
     </Declaration>
     <Declaration>
         <DataProperty abbreviatedIRI="foaf:lastName"/>
@@ -89,94 +92,149 @@
         <DataProperty abbreviatedIRI="foaf:name"/>
     </Declaration>
     <SubClassOf>
-        <Class IRI="#Artist"/>
-        <Class abbreviatedIRI="foaf:Person"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#Artist"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#hasStyle"/>
+            <ObjectProperty abbreviatedIRI="dbo:movement"/>
             <Class IRI="#Style"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Artist"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
         <ObjectSomeValuesFrom>
             <ObjectProperty IRI="#painted"/>
-            <Class IRI="#Work"/>
+            <Class abbreviatedIRI="dbo:Painting"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Museum"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#hasCountry"/>
-            <Class IRI="#Country"/>
+            <ObjectProperty abbreviatedIRI="dbp:country"/>
+            <Class abbreviatedIRI="dbo:Country"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Museum"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
         <ObjectSomeValuesFrom>
             <ObjectProperty IRI="#isAllocating"/>
-            <Class IRI="#Work"/>
+            <Class abbreviatedIRI="dbo:Painting"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#hasSubject"/>
+            <ObjectProperty abbreviatedIRI="dbp:subject"/>
             <Class IRI="#Subject"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
         <ObjectExactCardinality cardinality="1">
-            <ObjectProperty IRI="#wasPaintedBy"/>
-            <Class IRI="#Artist"/>
+            <ObjectProperty abbreviatedIRI="dbp:artist"/>
+            <Class abbreviatedIRI="dbo:Artist"/>
         </ObjectExactCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
         <ObjectMaxCardinality cardinality="1">
-            <ObjectProperty IRI="#hasStyle"/>
-            <Class IRI="#Style"/>
+            <ObjectProperty abbreviatedIRI="dbp:museum"/>
+            <Class abbreviatedIRI="dbo:Museum"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
         <ObjectMaxCardinality cardinality="1">
-            <ObjectProperty IRI="#isLocatedAt"/>
-            <Class IRI="#Museum"/>
+            <ObjectProperty abbreviatedIRI="dbp:style"/>
+            <Class IRI="#Style"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <DisjointClasses>
-        <Class IRI="#Country"/>
-        <Class IRI="#Museum"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class abbreviatedIRI="dbo:Country"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class IRI="#Nationality"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class IRI="#Style"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Artist"/>
+        <Class IRI="#Subject"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Country"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Country"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Country"/>
+        <Class IRI="#Nationality"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Country"/>
+        <Class IRI="#Style"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Country"/>
+        <Class IRI="#Subject"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Museum"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Museum"/>
+        <Class IRI="#Nationality"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Museum"/>
+        <Class IRI="#Style"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Museum"/>
+        <Class IRI="#Subject"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Painting"/>
+        <Class IRI="#Nationality"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Painting"/>
+        <Class IRI="#Style"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class abbreviatedIRI="dbo:Painting"/>
+        <Class IRI="#Subject"/>
+    </DisjointClasses>
+    <DisjointClasses>
         <Class IRI="#Nationality"/>
         <Class IRI="#Style"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#Nationality"/>
         <Class IRI="#Subject"/>
-        <Class IRI="#Work"/>
-        <Class abbreviatedIRI="foaf:Person"/>
     </DisjointClasses>
     <InverseObjectProperties>
-        <ObjectProperty IRI="#isAllocating"/>
-        <ObjectProperty IRI="#isLocatedAt"/>
+        <ObjectProperty abbreviatedIRI="dbp:artist"/>
+        <ObjectProperty IRI="#painted"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
-        <ObjectProperty IRI="#painted"/>
-        <ObjectProperty IRI="#wasPaintedBy"/>
+        <ObjectProperty abbreviatedIRI="dbp:museum"/>
+        <ObjectProperty IRI="#isAllocating"/>
     </InverseObjectProperties>
-    <FunctionalObjectProperty>
-        <ObjectProperty IRI="#hasCountry"/>
-    </FunctionalObjectProperty>
-    <FunctionalObjectProperty>
-        <ObjectProperty IRI="#hasNationality"/>
-    </FunctionalObjectProperty>
-    <FunctionalObjectProperty>
-        <ObjectProperty IRI="#isLocatedAt"/>
-    </FunctionalObjectProperty>
-    <FunctionalObjectProperty>
-        <ObjectProperty IRI="#wasPaintedBy"/>
-    </FunctionalObjectProperty>
     <InverseFunctionalObjectProperty>
         <ObjectProperty IRI="#isAllocating"/>
     </InverseFunctionalObjectProperty>
@@ -184,67 +242,72 @@
         <ObjectProperty IRI="#painted"/>
     </InverseFunctionalObjectProperty>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasNationality"/>
-        <Class IRI="#Artist"/>
+        <ObjectProperty abbreviatedIRI="dbo:movement"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasStyle"/>
-        <ObjectUnionOf>
-            <Class IRI="#Artist"/>
-            <Class IRI="#Work"/>
-        </ObjectUnionOf>
+        <ObjectProperty abbreviatedIRI="dbp:artist"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasSubject"/>
-        <Class IRI="#Work"/>
+        <ObjectProperty abbreviatedIRI="dbp:museum"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty abbreviatedIRI="dbp:nationality"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty abbreviatedIRI="dbp:style"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty abbreviatedIRI="dbp:subject"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#isAllocating"/>
-        <Class IRI="#Museum"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#isLocatedAt"/>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#painted"/>
-        <Class IRI="#Artist"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#wasPaintedBy"/>
-        <Class IRI="#Work"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
     </ObjectPropertyDomain>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasCountry"/>
-        <Class IRI="#Country"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasNationality"/>
-        <Class IRI="#Nationality"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasStyle"/>
+        <ObjectProperty abbreviatedIRI="dbo:movement"/>
         <Class IRI="#Style"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasSubject"/>
+        <ObjectProperty abbreviatedIRI="dbp:artist"/>
+        <Class abbreviatedIRI="dbo:Artist"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty abbreviatedIRI="dbp:country"/>
+        <Class abbreviatedIRI="dbo:Country"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty abbreviatedIRI="dbp:museum"/>
+        <Class abbreviatedIRI="dbo:Museum"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty abbreviatedIRI="dbp:nationality"/>
+        <Class IRI="#Nationality"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty abbreviatedIRI="dbp:style"/>
+        <Class IRI="#Style"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty abbreviatedIRI="dbp:subject"/>
         <Class IRI="#Subject"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#isAllocating"/>
-        <Class IRI="#Work"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#isLocatedAt"/>
-        <Class IRI="#Museum"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#painted"/>
-        <Class IRI="#Work"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#wasPaintedBy"/>
-        <Class IRI="#Artist"/>
+        <Class abbreviatedIRI="dbo:Painting"/>
     </ObjectPropertyRange>
     <FunctionalDataProperty>
         <DataProperty IRI="#address"/>
