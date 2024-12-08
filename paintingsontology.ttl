@@ -1,0 +1,207 @@
+@prefix : <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings/> .
+
+<http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://dbpedia.org/ontology/movement
+dbo:movement rdf:type owl:ObjectProperty ;
+             rdfs:domain dbo:Artist ;
+             rdfs:range :Style .
+
+
+###  http://dbpedia.org/property/artist
+dbp:artist rdf:type owl:ObjectProperty ;
+           owl:inverseOf :painted ;
+           rdfs:domain dbo:Painting ;
+           rdfs:range dbo:Artist .
+
+
+###  http://dbpedia.org/property/country
+dbp:country rdf:type owl:ObjectProperty ;
+            rdfs:range dbo:Country .
+
+
+###  http://dbpedia.org/property/museum
+dbp:museum rdf:type owl:ObjectProperty ;
+           owl:inverseOf :isAllocating ;
+           rdfs:domain dbo:Painting ;
+           rdfs:range dbo:Museum .
+
+
+###  http://dbpedia.org/property/nationality
+dbp:nationality rdf:type owl:ObjectProperty ;
+                rdfs:domain dbo:Artist ;
+                rdfs:range :Nationality .
+
+
+###  http://dbpedia.org/property/style
+dbp:style rdf:type owl:ObjectProperty ;
+          rdfs:domain dbo:Painting ;
+          rdfs:range :Style .
+
+
+###  http://dbpedia.org/property/subject
+dbp:subject rdf:type owl:ObjectProperty ;
+            rdfs:domain dbo:Painting ;
+            rdfs:range :Subject .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#isAllocating
+:isAllocating rdf:type owl:ObjectProperty ,
+                       owl:InverseFunctionalProperty ;
+              rdfs:domain dbo:Museum ;
+              rdfs:range dbo:Painting .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#painted
+:painted rdf:type owl:ObjectProperty ,
+                  owl:InverseFunctionalProperty ;
+         rdfs:domain dbo:Artist ;
+         rdfs:range dbo:Painting .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#address
+:address rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#city
+:city rdf:type owl:DatatypeProperty ,
+               owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#phone
+:phone rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#postal
+:postal rdf:type owl:DatatypeProperty ,
+                 owl:FunctionalProperty .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#state
+:state rdf:type owl:DatatypeProperty ,
+                owl:FunctionalProperty .
+
+
+###  http://xmlns.com/foaf/0.1/firstName
+foaf:firstName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/homepage
+foaf:homepage rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/lastName
+foaf:lastName rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/name
+foaf:name rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://dbpedia.org/ontology/Artist
+dbo:Artist rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty dbo:movement ;
+                             owl:someValuesFrom :Style
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :painted ;
+                             owl:someValuesFrom dbo:Painting
+                           ] ;
+           owl:disjointWith dbo:Country ,
+                            dbo:Museum ,
+                            dbo:Painting ,
+                            :Nationality ,
+                            :Style ,
+                            :Subject .
+
+
+###  http://dbpedia.org/ontology/Country
+dbo:Country rdf:type owl:Class ;
+            owl:disjointWith dbo:Museum ,
+                             dbo:Painting ,
+                             :Nationality ,
+                             :Style ,
+                             :Subject .
+
+
+###  http://dbpedia.org/ontology/Museum
+dbo:Museum rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty dbp:country ;
+                             owl:someValuesFrom dbo:Country
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :isAllocating ;
+                             owl:someValuesFrom dbo:Painting
+                           ] ;
+           owl:disjointWith dbo:Painting ,
+                            :Nationality ,
+                            :Style ,
+                            :Subject .
+
+
+###  http://dbpedia.org/ontology/Painting
+dbo:Painting rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty dbp:subject ;
+                               owl:someValuesFrom :Subject
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty dbp:artist ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass dbo:Artist
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty dbp:museum ;
+                               owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass dbo:Museum
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty dbp:style ;
+                               owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass :Style
+                             ] ;
+             owl:disjointWith :Nationality ,
+                              :Style ,
+                              :Subject .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Nationality
+:Nationality rdf:type owl:Class ;
+             owl:disjointWith :Style ,
+                              :Subject .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Style
+:Style rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#Subject
+:Subject rdf:type owl:Class .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
