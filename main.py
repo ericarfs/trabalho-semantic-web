@@ -126,13 +126,15 @@ def show_museum_details(museum_name):
             label1.pack(pady=10)
     
     #Abstract
-    #if museum_info['abstract']:
-        #contact_label = Label(content_frame, text=museum_info['abstract'], font=("Arial", 10))
-        #contact_label.pack(pady=10)
+    if museum_info['abstract']:
+        contact_label = Label(content_frame, text=museum_info['abstract'], font=("Arial", 10), wraplength=800, justify="left")
+        contact_label.pack(pady=10)
     
     # Contact
     contact_title_label = Label(content_frame, text=f"Contact:", font=("Arial", 12))
     contact_title_label.pack(pady=10)
+    if museum_info['city'].isdigit():
+        museum_info['city'] = None
     address = (museum_info['address'] if museum_info['address'] else "---") + ", " + (museum_info['city'] if museum_info['city'] else "---") + ", " + (museum_info['state'] if museum_info['state'] else "---") + ", " + (museum_info['country'] if museum_info['country'] else "---")
     contact_info = f"Phone: {museum_info['phone']}\nWebsite: {museum_info['url']}\nAddress: {address}"
     contact_label = Label(content_frame, text=contact_info, font=("Arial", 10))
@@ -170,7 +172,7 @@ def show_museum_details(museum_name):
         for painting in painting_list[style]:
             link = Label(content_frame, text=painting['title'], fg="blue", cursor="hand2", pady=2)
             link.pack(anchor="w")
-            link.bind("<Button-1>", lambda e, uri=painting['uri']:show_painting_details(uri))
+            link.bind("<Button-1>", lambda e, uri=painting['uri'], dbpedia_uri=painting['dbpedia_uri']:show_painting_details(uri, dbpedia_uri))
     
     # Update the scrollable region of the canvas
     content_frame.update_idletasks()
@@ -210,7 +212,7 @@ def create_gui(museums_by_country):
 def get_list_of_paintings(museum_name):
     q = f"""
         PREFIX : <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#>
-        SELECT ?workLocal ?title ?style
+        SELECT ?workLocal ?workDbo ?title ?style
         WHERE {{
             SERVICE <https://dbpedia.org/sparql> {{
                 ?workDbo a dbo:Work ;
@@ -228,17 +230,18 @@ def get_list_of_paintings(museum_name):
         }}
     """
 
-    painting_list = fetch_data_from_query(q, ['painting_uri', 'title','style'])
+    painting_list = fetch_data_from_query(q, ['painting_uri', 'painting_dbpedia_uri', 'title','style'])
     
     organized = {}
     for painting in painting_list:
-        uri = painting['painting_uri']
-        title = painting['title'] if painting['style'] else 'Untitled'
+        uri = painting['painting_uri'] if painting['painting_uri'] else None
+        dbpedia_uri = painting['painting_dbpedia_uri'] if painting['painting_dbpedia_uri'] else None
+        title = painting['title'] if painting['title'] else 'Untitled'
         style = painting['style'] if painting['style'] else 'Unclassified'
         
         if style not in organized:
             organized[style] = []
-        obj = {'title': title, 'uri': uri}
+        obj = {'title': title, 'uri': uri, 'dbpedia_uri': dbpedia_uri}
         organized[style].append(obj)
     
     return organized
@@ -255,7 +258,7 @@ def organize_by_country(museums):
     
     return organized
 
-def show_painting_details(painting_uri):
+def show_painting_details(painting_uri, dbpedia_uri):
     painting_window = Toplevel()  # Create a new top-level window
     painting_window.title(f"{painting_uri}")
 
@@ -276,24 +279,31 @@ def show_painting_details(painting_uri):
 
     query = f"""
             PREFIX : <http://www.semanticweb.org/ericarfs/ontologies/2024/10/famouspaintings#>
-
-            SELECT ?title ?artist ?style ?museum ?thumbnail
+    
+            SELECT ?title ?artist ?style ?subject ?museum ?thumbnail ?abstract
             WHERE {{
+
                 SERVICE <https://dbpedia.org/sparql> {{
-                    ?workDbo a dbo:Work ;
-                        dbo:museum/rdfs:label ?museum ;
-                        dbo:thumbnail ?thumbnail .
-                }}
-                <{painting_uri}> foaf:name ?title ;
-                    dbp:artist/foaf:name ?artist ;
-                    dbp:style/foaf:name ?style .
+                    <{dbpedia_uri}> a dbo:Work .
+                                    OPTIONAL {{<{dbpedia_uri}> dbp:title ?title .}}
+                                    OPTIONAL {{<{dbpedia_uri}> dbp:artist/foaf:name ?artist .}}
+                                    OPTIONAL {{<{dbpedia_uri}> dbp:subject ?subject .}}
+                                    OPTIONAL {{<{dbpedia_uri}> dbo:museum/foaf:name ?museum .}}
+                                    OPTIONAL {{<{dbpedia_uri}> dbo:thumbnail ?thumbnail .}}
+                                    OPTIONAL {{<{dbpedia_uri}> dbo:abstract ?abstract .}}          
+                                    
+                }}      
+
+                OPTIONAL {{ <{painting_uri}> dbp:style/foaf:name ?style .}}
             }}
             LIMIT 1
         """
     
-    att_names = ['title', 'artist', 'style', 'museum', 'thumbnail']
-    painting_info = fetch_data_from_query(query, att_names)
+    att_names = ['title', 'artist', 'style', 'subject', 'museum', 'thumbnail', 'abstract']    
+    
+    painting_info = fetch_data_from_query(query, att_names)    
     painting_info = painting_info[0]
+    print(painting_info)
     
      # Title
     title_label = Label(content_frame, text=painting_info['title'], font=("Arial", 12))
@@ -301,7 +311,9 @@ def show_painting_details(painting_uri):
 
     # Image
     if painting_info['thumbnail']:
-        response = requests.get(painting_info['thumbnail'])
+        print(painting_info['thumbnail'])
+        response = requests.get(painting_info['thumbnail'], allow_redirects=True)
+        print(response.status_code)
         if response.status_code == 200:
             thumbnail = Image.open(BytesIO(response.content))
             test = ImageTk.PhotoImage(thumbnail)
@@ -310,6 +322,8 @@ def show_painting_details(painting_uri):
             label1.pack(pady=10)
     
     # Info
+    contact_label = Label(content_frame, text=painting_info['abstract'], font=("Arial", 10), wraplength=800, justify="left")
+    contact_label.pack(pady=10)
     contact_label = Label(content_frame, text=f"Artist: {painting_info['artist']}", font=("Arial", 10))
     contact_label.pack(pady=5)
     contact_label = Label(content_frame, text=f"Style: {painting_info['style']}", font=("Arial", 10))
@@ -318,14 +332,8 @@ def show_painting_details(painting_uri):
     contact_label.pack(pady=5)
 
     # URI
-    more_info_label = Label(content_frame, text=f"URI: {painting_uri}", font=("Arial", 10))
+    more_info_label = Label(content_frame, text=f"URI: {painting_uri if painting_uri else dbpedia_uri}", font=("Arial", 10))
     more_info_label.pack(pady=5)
-    
-        
-        
-    #link = Label(content_frame, text=painting, fg="blue", cursor="hand2", pady=2)
-    #link.pack(anchor="w")
-    #link.bind("<Button-1>", lambda e, name=museum:show_museum_details(name))
     
     # Update the scrollable region of the canvas
     content_frame.update_idletasks()
