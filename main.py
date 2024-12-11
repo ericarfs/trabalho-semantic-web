@@ -338,7 +338,7 @@ if __name__ == "__main__":
 
     mymodel = DataModel(collector)
 
-    output_file = "model"
+    output_file = "model.ttl"
     mymodel.save_model(output_file)
 
     schema_file = "./paintingsontology.ttl"
